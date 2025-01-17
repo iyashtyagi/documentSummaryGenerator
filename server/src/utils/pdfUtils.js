@@ -6,9 +6,9 @@ const basePdfFolderPath = path.join(__dirname, '../../sample/pdf');
 
 // to parse pdf
 async function fileParser(){
-    const pdfName = "deeplearning.pdf";
+    const pdfName = "English_French.pdf";
     const pdfPath = path.join(basePdfFolderPath, pdfName);
-    const isData = true;
+    let isData = true;
     try {
         const dataBuffer = await fs.readFile(pdfPath);
         const data = await pdfParse(dataBuffer);
