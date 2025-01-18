@@ -1,0 +1,35 @@
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+function promptGen(content, length){
+    let prompt = '';
+
+    switch(length) {
+        case 'short':
+            prompt = `Please provide a concise summary of the following document, capturing the essential ideas in a brief, short form:\n\n${content}`;
+            break;
+        case 'medium':
+            prompt = `Please summarize the following document in a medium-length format, highlighting the key points and main ideas while keeping the summary informative but not too detailed:\n\n${content}`;
+            break;
+        case 'long':
+            prompt = `Please provide a detailed summary of the following document, ensuring that all important points and main ideas are included in a comprehensive format. Capture enough context for a deeper understanding of the content:\n\n${content}`;
+            break;
+        default:
+            throw new Error('Invalid summary length. Please choose "short", "medium", or "long".');
+    }
+    return prompt;
+}
+
+async function genSummary( content, length ) {
+    const prompt = promptGen( content, length );
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
+
+module.exports = {
+    genSummary
+}

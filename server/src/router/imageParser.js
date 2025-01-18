@@ -9,7 +9,8 @@ router.post("/", upload.single("file"), async (req, res)=>{
     if (!result.isData) {
         res.status(411).json({"message": "something went wrong"});
     }
-    res.json({ isData: result.isData, data: result.data });
+    const summary = await genSummary(result.data, req.body.length);
+    res.json({ isData: result.isData, data: summary });
 })
 
 module.exports = router;
