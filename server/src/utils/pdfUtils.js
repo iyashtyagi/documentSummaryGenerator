@@ -5,14 +5,12 @@ const pdfParse = require("pdf-parse");
 const basePdfFolderPath = path.join(__dirname, '../../sample/pdf');
 
 // to parse pdf
-async function fileParser(){
-    const pdfName = "English_French.pdf";
-    const pdfPath = path.join(basePdfFolderPath, pdfName);
+async function fileParser(filePath){
     let isData = true;
     try {
-        const dataBuffer = await fs.readFile(pdfPath);
-        const data = await pdfParse(dataBuffer);
-        return { isData, data };  
+        const dataBuffer = await fs.readFile(filePath);
+        const result = await pdfParse(dataBuffer);
+        return { isData, data: result.text };  
     } catch (error) {
         isData = false;
         console.error(error);

@@ -1,13 +1,15 @@
 const express = require("express");
-const { imageParser } = require("../utils/imageUtil");
 const router = express.Router();
+const { imageParser } = require("../utils/imageUtil");
+const { upload } = require("../utils/multerUtil");
 
-router.get("/", async (req, res)=>{
-    const result = await imageParser();
+router.post("/", upload.single("file"), async (req, res)=>{
+    const imagePath = req.file.path;
+    const result = await imageParser(imagePath);
     if (!result.isData) {
         res.status(411).json({"message": "something went wrong"});
     }
-    res.json({ data: result.data });
+    res.json({ isData: result.isData, data: result.data });
 })
 
 module.exports = router;
